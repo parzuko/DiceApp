@@ -1,5 +1,6 @@
 package com.example.diceroller
 
+import android.animation.Animator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,10 +12,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        dice.addAnimatorListener(object: Animator.AnimatorListener{
+            override fun onAnimationStart(animation: Animator) {
+            }
+
+            override fun onAnimationEnd(animation:Animator){
+                hideDice()
+                val random = (1..6).random()
+                textView.text = random.toString()
+            }
+
+            override fun onAnimationCancel(animation: Animator){
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+            }
+        })
     }
 
-    fun onButtonClicked(view: View ){
-        val randomNumber = (1..6).random()
-        textView.text = randomNumber.toString()
+    private fun showDice(){
+        dice.visibility = View.VISIBLE
+        textView.visibility = View.GONE
+        button.isEnabled = false
+    }
+
+    private fun hideDice(){
+        dice.visibility = View.GONE
+        textView.visibility = View.VISIBLE
+        button.isEnabled = true
+    }
+
+    fun rollDiceClick (view: View){
+        showDice()
+        dice.playAnimation()
     }
 }
